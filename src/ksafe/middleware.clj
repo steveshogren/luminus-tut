@@ -12,6 +12,12 @@
             [ring.middleware.session-timeout :refer [wrap-idle-session-timeout]]
             [ring.middleware.session.memory :refer [memory-store]]
             [ring.middleware.format :refer [wrap-restful-format]]
+            
+            [buddy.auth.middleware :refer [wrap-authentication]]
+            [buddy.auth.backends.session :refer [session-backend]]
+            [buddy.auth.accessrules :refer [restrict]]
+            [buddy.auth :refer [authenticated?]]
+            [ksafe.layout :refer [*identity*]]
             ))
 
 (defn wrap-servlet-context [handler]
@@ -48,10 +54,29 @@
 (defn wrap-formats [handler]
   (wrap-restful-format handler :formats [:json-kw :transit-json :transit-msgpack]))
 
+(defn on-error [request response]
+  {:status  403
+   :headers {"Content-Type" "text/plain"}
+   :body    (str "Access to " (:uri request) " is not authorized")})
+
+(defn wrap-restricted [handler]
+  (restrict handler {:handler authenticated?
+                     :on-error on-error}))
+
+(defn wrap-identity [handler]
+  (fn [request]
+    (binding [*identity* (or (get-in request [:session :identity]) nil)]
+      (handler request))))
+
+(defn wrap-auth [handler]
+  (-> handler
+      wrap-identity
+      (wrap-authentication (session-backend))))
+
 (defn wrap-base [handler]
   (-> handler
       wrap-dev
-      
+      wrap-auth
       (wrap-idle-session-timeout
         {:timeout (* 60 30)
          :timeout-response (redirect "/")})

@@ -1,6 +1,7 @@
 (ns ksafe.handler
   (:require [compojure.core :refer [defroutes routes wrap-routes]]
             [ksafe.routes.home :refer [home-routes]]
+            
             [ksafe.middleware :as middleware]
             [ksafe.session :as session]
             [compojure.route :as route]
@@ -65,6 +66,7 @@
 
 (def app
   (-> (routes
+        
         (wrap-routes home-routes middleware/wrap-csrf)
         base-routes)
       middleware/wrap-base))

@@ -1,39 +1,13 @@
 (ns ksafe.routes.home
   (:require [ksafe.layout :as layout]
-            [compojure.core :refer [defroutes GET POST]]
+            [compojure.core :refer [defroutes GET]]
             [ring.util.http-response :refer [ok]]
-            [clojure.java.io :as io]
-            [ksafe.db.core :as db]
-            [bouncer.core :as b]
-            [bouncer.validators :as v]
-            [ring.util.response :refer [redirect]]
-            ))
+            [clojure.java.io :as io]))
 
-(defn validate-message [params]
-  (first
-    (b/validate
-      params
-      :name v/required
-      :message [v/required [v/min-count 10]])))
-
-(defn save-message! [{:keys [params]}]
-  (if-let [errors (validate-message params)]
-    (-> (redirect "/")
-        (assoc :flash (assoc params :errors errors)))
-    (do
-      (db/save-message! (assoc params :timestamp (java.util.Date.)))
-      (redirect "/"))))
-
-(defn home-page [{:keys [flash]}]
-  (layout/render
-   "home.html"
-   (merge {:messages (db/get-messages)}
-          (select-keys flash [:name :message :errors]))))
-
-(defn about-page []
-  (layout/render "about.html"))
+(defn home-page []
+  (layout/render "home.html"))
 
 (defroutes home-routes
-  (GET "/" request (home-page request))
-  (POST "/" request (save-message! request))
-  (GET "/about" [] (about-page)))
+  (GET "/" [] (home-page))
+  (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))
+

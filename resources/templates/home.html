@@ -1,44 +1,34 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="row">
-  <div class="span12">
-    <ul class="messages">
-      {% for item in messages %}
-      <li>
-        <time>{{item.timestamp|date:"yyyy-MM-dd HH:mm"}}</time>
-        <p>{{item.message}}</p>
-        <p> - {{item.name}}</p>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-<div class="row">
-  <div class="span12">
-    <form method="POST" action="/">
-      {% csrf-field %}
-      <p>
-        Name:
-        <input class="form-control"
-               type="text"
-               name="name"
-               value="{{name}}" />
-      </p>
-      {% if errors.name %}
-      <div class="alert alert-danger">{{errors.name|join}}</div>
-      {% endif %}
-      <p>
-        Message:
-        <textarea class="form-control"
-                  rows="4"
-                  cols="50"
-                  name="message">{{message}}</textarea>
-      </p>
-      {% if errors.message %}
-      <div class="alert alert-danger">{{errors.message|join}}</div>
-      {% endif %}
-      <input type="submit" class="btn btn-primary" value="comment" />
-    </form>
-  </div>
-</div>
-{% endblock %}
+<html>
+  <head>
+      <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Welcome to ksafe</title>
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <div id="app">
+      <p>If you're seeing this message, that means you haven't yet compiled your ClojureScript!</p>
+      <p>Please run <code>lein figwheel</code> to start the ClojureScript compiler and reload the page.</p>
+      <p>See <a href="http://www.luminusweb.net/docs/clojurescript.md">ClojureScript</a> documentation for further details.</p>
+    </div>
+
+    <!-- scripts and styles -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    {% style "/css/screen.css" %}
+
+    <script type="text/javascript">
+        var context = "{{servlet-context}}";
+    </script>
+    {% if dev %}
+      {% script "/js/out/goog/base.js" %}
+      {% script "/js/app.js" %}
+      <script type="text/javascript">goog.require("ksafe.app");</script>
+    {% else %}
+      {% script "/js/app.js" %}
+    {% endif %}
+  </body>
+</html>
+
+
+
+
