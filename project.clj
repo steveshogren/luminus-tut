@@ -39,7 +39,7 @@
   :jvm-opts ["-server"]
 
 ;;enable to start the nREPL server when the application launches
-;:env {:repl-port 7001}
+  :env {:repl-port 7001}
 
   :main ksafe.core
 
@@ -60,7 +60,7 @@
   :ragtime
   {:migrations ragtime.sql.files/migrations
    :database
-   "jdbc:postgresql://localhost/ksafe?user=db_user_name_here&password=db_user_password_here"}
+   "jdbc:postgresql://localhost/ksafe?user=postgres&password=changeme"}
   
   
   :clean-targets ^{:protect false} ["resources/public/js"]

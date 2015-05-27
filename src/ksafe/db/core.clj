@@ -12,8 +12,8 @@
 (def db-spec
   {:subprotocol "postgresql"
    :subname "//localhost/ksafe"
-   :user "db_user_name_here"
-   :password "db_user_password_here"})
+   :user "postgres"
+   :password "changeme"})
 
 (defqueries "sql/queries.sql" {:connection db-spec})
 
