@@ -9,5 +9,6 @@
 
 (defroutes home-routes
   (GET "/" [] (home-page))
+  (GET "/data" [] (ok "test data"))
   (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))
 

@@ -17,11 +17,28 @@
      [:ul.nav.navbar-nav
       [:li {:class (when (= :home (session/get :page)) "active")}
        [:a {:href "#/"} "Home"]]
+      [:li {:class (when (= :friends (session/get :page)) "active")}
+       [:a {:href "#/friends"
+            :on-click #(getdata!)
+            } "Friends"]]
       [:li {:class (when (= :about (session/get :page)) "active")}
        [:a {:href "#/about"} "About"]]]]]])
 
+(defn getdata! []
+  (GET "/data" {:handler #(session/put! :data %)}))
+
 (defn about-page []
   [:div "this is the story of ksafe... work in progress"])
+
+(defn friends-page []
+  [:div
+   [:h1 "te"]
+   (when-let [docs (session/get :data)]
+             [:div.row
+              [:div.col-md-12
+               [:div {:dangerouslySetInnerHTML
+                      {:__html (md->html docs)}}]]])
+   [:div "this is the story of ksafe... work in progress"]])
 
 (defn home-page []
   [:div.container
@@ -40,6 +57,7 @@
 
 (def pages
   {:home #'home-page
+   :friends #'friends-page
    :about #'about-page})
 
 (defn page []
@@ -54,6 +72,9 @@
 
 (secretary/defroute "/about" []
   (session/put! :page :about))
+
+(secretary/defroute "/friends" []
+  (session/put! :page :friends))
 
 ;; -------------------------
 ;; History
