@@ -36,6 +36,7 @@
              [:div.row
               [:div.col-md-12
                [:div docs]]])
+   [:div [:button {:on-click #(getdata!)} "test"]]
    [:div "this is the story of ksafe... work in progress"]])
 
 (defn home-page []
