@@ -35,8 +35,7 @@
    (when-let [docs (session/get :data)]
              [:div.row
               [:div.col-md-12
-               [:div {:dangerouslySetInnerHTML
-                      {:__html docs}}]]])
+               [:div docs]]])
    [:div "this is the story of ksafe... work in progress"]])
 
 (defn home-page []
