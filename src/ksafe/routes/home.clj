@@ -9,6 +9,6 @@
 
 (defroutes home-routes
   (GET "/" [] (home-page))
-  (GET "/data" [] (ok "test data"))
+  (GET "/data" [] (ok (int (/ (.getTime (java.util.Date.)) 1000))))
   (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))
 
